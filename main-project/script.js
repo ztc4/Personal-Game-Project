@@ -4,6 +4,13 @@ import dialog from "./npc.js";
 
 let canvas = document.getElementById("canvas1");
 let ctx = canvas.getContext("2d");
+// dialog second
+
+const dialogHtml =  document.getElementById("dialog");
+const dialogText = document.getElementById("dialogText");
+// dialogHtml.classList.toggle("dialog")
+
+
 const canvasHeight = ctx.height = 576;
 const canvasWidth = ctx.width = 1024;
 let x = -200;
@@ -75,7 +82,7 @@ function cameraMovement(e){
         case "ArrowLeft": if(map.x >= -1000){map.x -= 1;player.position.x -= 1};break;
         case "ArrowUp": if(map.y >= -1000){map.y -=1;player.position.y -=1};break;
         case "ArrowDown": if(map.y <= 0){map.y +=1;player.position.y +=1};break;
-        case "e": if(aroundDialog(true)){console.log("red")};break;
+        case "e": if(aroundDialog(true)){console.log("this is the current dialog your on s" +player.currentDialog)};break;
         case "r": if(aroundDialog(false,true)){console.log("red")};break;
         
     }
@@ -106,11 +113,29 @@ const map = new Map(ctx)
 map.image = mapImage;
 addCameraMovement()
 
-// Dialogs
-const firstDialog = new dialog(ctx,player)
-firstDialog.addImages(1,20,"VScodeChat")
-console.log(firstDialog.currentImage.src)
+const dialogArray1 = ["Hey there, finally up I see?", "As you can probably tell, right now Im desperate", 
+"A Great friend of mine has betrayed my trust", "I really need your help",
+"Oops! Excuse my manners, I even forgot tell you what went wrong", "My friend Javacript has recently changed, his lust for power has caused me great harm", 
+"It all started when JavaScript was born, unlike other languages his creators made him specifically for one thing only...", "Browser Scripting! and he was the best at it",
+"But i guess secretly Javascript grew hatred for the limits of his abilities", " and was meeting a programmer that bewitched him with promises of power that could make him reach his true potential",
+"The new powers bestowed on to JavaScript were too plentiful",
+ "Programmers follow the others lead and made more packages and libraries for JavaScript","As a friend I couldn't let the power corrupt him further","I tried interfering, and slowing down Javascript, but he must of heard of my meddling", "When talking he caught me by surprise, he must of hit me with a new virus",
+"I currently can no longer move","I need you to travel north, there you'll meet King NPM",
+"Send him my regards, and ask him to disconnect JavaScript immediately from getting anymore packages",
+"Report back to me once done!"
+]
 
+
+// Dialogs
+const firstDialog = new dialog(ctx,player,dialogHtml,dialogText)
+firstDialog.addText(dialogArray1)
+    
+const secondDialog = new dialog(ctx,player,dialogHtml,dialogText)
+const thirdDialog = new dialog(ctx,player,dialogHtml,dialogText)
+const fourthDialog = new dialog(ctx,player,dialogHtml,dialogText)
+const fifthDialog = new dialog(ctx,player,dialogHtml,dialogText)
+
+// firstDialog.addImages(1,20,"VScodeChat")
 
 
 //Check if player is on the edge of map, if so it adds to map
@@ -154,26 +179,32 @@ function aroundDialog(wantToOpenDialog,moveForward){
          player.location.y >= -500 && 
          player.location.y <= -396  && (player.currentDialog == 1 || player.currentDialog == 3)){
             
-            wantToOpenDialog && firstDialog.makeActive()
-            moveForward && firstDialog.nextImage()
+            wantToOpenDialog && firstDialog.makeActive();
+            moveForward && firstDialog.nextText();
 
         
         return true
     }
     //CHEST
-    if(player.location.x >= -228 
+    else if (player.location.x >= -228 
         && player.location.x <= -140 &&
          player.location.y >= -500 && 
          player.location.y <= -396 && player.currentDialog == 5){
+
+            wantToOpenDialog && fifthDialog.makeActive();
+            moveForward && fifthDialog.nextText();
         
         return true
     }
     //Old Programmer
-    if(player.location.x >= -540 
+    else if(player.location.x >= -540 
         && player.location.x <= -383 &&
          player.location.y >= -300 && 
-         player.location.y <= -236 && player.currentDialog == 4){
-        
+         player.location.y <= -236 && player.currentDialog == 2){
+
+            wantToOpenDialog && secondDialog.makeActive();
+            moveForward && secondDialog.nextText();
+            console.log("on next dialog")
         return true
     }
     return false
@@ -213,7 +244,14 @@ mapNeedtoMove()
     
     map.update()
     player.update()
-    firstDialog.update()
+    switch(player.currentDialog){
+        case 1:firstDialog.draw() ;break;
+        case 2:secondDialog.draw() ;break;
+        case 3:thirdDialog.draw() ;break;
+        case 4: fourthDialog.draw() ;break;
+        case 5:fifthDialog.draw() ;break;
+    
+    }
     ctx.fillStyle = "white";
     if(player.location){
         if(aroundDialog()){
@@ -231,14 +269,23 @@ mapNeedtoMove()
 
 animate()
 
-
-
-
 player.setLocation(map.x,map.y)
 player.draw()
 
 map.draw()
-firstDialog.draw()
+
+//which dialog to look out for
+
+switch(player.currentDialog){
+    case 1:firstDialog.draw() ;break;
+    case 2:secondDialog.draw() ;break;
+    case 3:thirdDialog.draw() ;break;
+    case 4: fourthDialog.draw() ;break;
+    case 5:fifthDialog.draw() ;break;
+
+}
+
+
 // setInterval(()=> console.table(player.location), 2000);
 // setInterval(()=> console.table(map.x ,map.y), 2000)
 

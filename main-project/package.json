@@ -1,0 +1,11 @@
+{
+  "name": "main-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bufferImage.js",
+  "scripts": {
+    "test": "node index.html"
+  },
+  "author": "",
+  "license": "ISC"
+}

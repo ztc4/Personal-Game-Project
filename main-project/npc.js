@@ -1,55 +1,73 @@
 class dialog{
 
-    constructor(ctx,player){
+    constructor(ctx,player,dialogBox,dialogText){
 
 
-        this.dialogImages = [];
+        this.dialogText = ["the first dialog","red", "header is here"];
         this.currentNumber = 0
         this.currentImage = new Image;
         this.ctx = ctx;
         this.player = player;
-        this.active= false;
+        this.active = false;
         this.hasBeenPlayed = false;
+        this.dialogHtml =  dialogBox
+        this.dialogInnerText =  dialogText
+       
 
     }
     
     draw(){
-        this.ctx.fillStyle = this.color;
-        this.currentImage.src = this.dialogImages[this.currentNumber]
-        this.ctx.drawImage(this.currentImage,0,0)
+        if(this.active ){
+            
+            console.log(this.currentNumber)
+            this.dialogInnerText.innerText = this.dialogText[this.currentNumber]
+            console.log(this.dialogText[this.currentNumber])
+        
+    }
+        else if( !this.active ){
+            
+            this.dialogInnerText.innerText = ""
+
+        }
+        
+        
+        
        
     
     }
     update(){
-        if(this.currentNumber < this.dialogImages.length && this.active ){
-        this.draw()}
+        this.draw()
     }
-    addImages(startNumber,endNumber , path){
-        for(let i = startNumber; i < endNumber; i++){
-            this.dialogImages.push(`${path}/${i}.png`)
-        }
-        this.currentImage.src = this.dialogImages[this.currentNumber];
-        console.log(this.currentImage.src)
-        console.log(this.dialogImages)
 
+    addText(dialogs){
+        this.dialogText.push(...dialogs)
 
     }
-    nextImage(){
-        if(this.dialogImages.length > this.currentNumber){
+    nextText(){
+        if(this.currentNumber  <= this.dialogText.length - 2){
             this.currentNumber++
+            console.log(this.currentNumber)
+            console.log("is changing the number")
+            console.log(this.active)
     }
     else{
         this.active = false
         this.hasBeenPlayed = true
         this.player.currentDialog++
         console.log(this.player)
+        this.dialogHtml.classList.toggle("dialog")
+        this.dialogInnerText.innerText = ""
        
     }
-    console.log(this.currentNumber)
-    console.log(this.dialogImages)
+    console.log(this.dialogHtml.classList)
+    console.log("this is the dialog text length" + this.dialogText.length)
 }
+
+
+
 makeActive(){
-    this.active= true;
+    this.active = true;
+    this.dialogHtml.classList.toggle("dialog")
 }
 toggleEvent(){
 
